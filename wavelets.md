@@ -19,32 +19,6 @@ We will need
 %pip install -r requirements.txt
 ```
 
-    Requirement already satisfied: numpy in /opt/conda/envs/notebook/lib/python3.12/site-packages (from -r requirements.txt (line 1)) (1.26.4)
-    Collecting scipy<1.15 (from -r requirements.txt (line 2))
-      Downloading scipy-1.14.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
-    Requirement already satisfied: matplotlib in /opt/conda/envs/notebook/lib/python3.12/site-packages (from -r requirements.txt (line 3)) (3.10.1)
-    Requirement already satisfied: pywavelets in /opt/conda/envs/notebook/lib/python3.12/site-packages (from -r requirements.txt (line 4)) (1.8.0)
-    Requirement already satisfied: contourpy>=1.0.1 in /opt/conda/envs/notebook/lib/python3.12/site-packages (from matplotlib->-r requirements.txt (line 3)) (1.3.1)
-    Requirement already satisfied: cycler>=0.10 in /opt/conda/envs/notebook/lib/python3.12/site-packages (from matplotlib->-r requirements.txt (line 3)) (0.12.1)
-    Requirement already satisfied: fonttools>=4.22.0 in /opt/conda/envs/notebook/lib/python3.12/site-packages (from matplotlib->-r requirements.txt (line 3)) (4.56.0)
-    Requirement already satisfied: kiwisolver>=1.3.1 in /opt/conda/envs/notebook/lib/python3.12/site-packages (from matplotlib->-r requirements.txt (line 3)) (1.4.8)
-    Requirement already satisfied: packaging>=20.0 in /opt/conda/envs/notebook/lib/python3.12/site-packages (from matplotlib->-r requirements.txt (line 3)) (24.2)
-    Requirement already satisfied: pillow>=8 in /opt/conda/envs/notebook/lib/python3.12/site-packages (from matplotlib->-r requirements.txt (line 3)) (11.1.0)
-    Requirement already satisfied: pyparsing>=2.3.1 in /opt/conda/envs/notebook/lib/python3.12/site-packages (from matplotlib->-r requirements.txt (line 3)) (3.2.1)
-    Requirement already satisfied: python-dateutil>=2.7 in /opt/conda/envs/notebook/lib/python3.12/site-packages (from matplotlib->-r requirements.txt (line 3)) (2.9.0.post0)
-    Requirement already satisfied: six>=1.5 in /opt/conda/envs/notebook/lib/python3.12/site-packages (from python-dateutil>=2.7->matplotlib->-r requirements.txt (line 3)) (1.17.0)
-    Downloading scipy-1.14.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (40.8 MB)
-    [2K   [90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m40.8/40.8 MB[0m [31m142.1 MB/s[0m eta [36m0:00:00[0m00:01[0m
-    [?25hInstalling collected packages: scipy
-      Attempting uninstall: scipy
-        Found existing installation: scipy 1.15.2
-        Uninstalling scipy-1.15.2:
-          Successfully uninstalled scipy-1.15.2
-    Successfully installed scipy-1.14.1
-    Note: you may need to restart the kernel to use updated packages.
-
-
-
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -115,19 +89,6 @@ axs[1].set_ylabel("Frequency (Hz)")
 plt.suptitle("Sine signal")
 plt.show()
 ```
-
-
-    
-![png](wavelets_files/wavelets_5_0.png)
-    
-
-
-
-    
-![png](wavelets_files/wavelets_5_1.png)
-    
-
-
 ## Perform a Continuous Wavelet Transform on the Signals
 
 Using two implementations on two signals will give us four CWTs total.
@@ -208,18 +169,6 @@ fig.colorbar(pcm4, ax=ax4)
 fig.tight_layout()
 ```
 
-    /tmp/ipykernel_196/190408064.py:12: DeprecationWarning: scipy.signal.cwt is deprecated in SciPy 1.12 and will be removed
-    in SciPy 1.15. We recommend using PyWavelets instead.
-    
-      cwtmatr = signal.cwt(y_signal, wavelet, widths)
-
-
-
-    
-![png](wavelets_files/wavelets_7_1.png)
-    
-
-
 I don't understand why the chirp power spectra are offset from where the dominant frequencies should be. If it's offset for those, why is it not also offset for the sinusoid power spectra? The peaks in the sinusoidal power spectra are very slightly offset from the defined frequencies, but this is probably wavelet resolution effects or something.
 
 ## Everything below here is just playing around
@@ -238,21 +187,6 @@ ax.set_title(wavelet)
 ax.set_xlim([-5, 5])
 ax.set_ylim([-0.8, 1])
 ```
-
-
-
-
-    (-0.8, 1.0)
-
-
-
-
-    
-![png](wavelets_files/wavelets_10_1.png)
-    
-
-
-
 ```python
 periods = 2, 8, 32, 128, 512
 t0, tf = 0, 13*365.25
@@ -260,14 +194,6 @@ t = np.arange(t0, tf, 0.1)
 y = np.sum([np.sin(2*np.pi*t/p) for p in periods], axis=0)
 plt.plot(t, y);
 ```
-
-
-    
-![png](wavelets_files/wavelets_11_0.png)
-    
-
-
-
 ```python
 # perform CWT
 wavelet = "cmor1.5-1.0"
@@ -305,42 +231,9 @@ axs.invert_yaxis()
 fig.colorbar(pcm, ax=axs)
 ```
 
-    /tmp/ipykernel_166/2780547923.py:25: DeprecationWarning: scipy.signal.cwt is deprecated in SciPy 1.12 and will be removed
-    in SciPy 1.15. We recommend using PyWavelets instead.
-    
-      power = signal.cwt(y, signal.morlet2, widths)
-
-
-
-
-
-    <matplotlib.colorbar.Colorbar at 0x7fceab1891d0>
-
-
-
-
-    
-![png](wavelets_files/wavelets_12_2.png)
-    
-
-
-
 ```python
 %pip install ssqueezepy
 ```
-
-    Collecting ssqueezepy
-      Downloading ssqueezepy-0.6.5-py3-none-any.whl.metadata (14 kB)
-    Requirement already satisfied: numpy in /opt/conda/envs/notebook/lib/python3.11/site-packages (from ssqueezepy) (1.26.4)
-    Requirement already satisfied: numba in /opt/conda/envs/notebook/lib/python3.11/site-packages (from ssqueezepy) (0.60.0)
-    Requirement already satisfied: scipy in /opt/conda/envs/notebook/lib/python3.11/site-packages (from ssqueezepy) (1.14.1)
-    Requirement already satisfied: llvmlite<0.44,>=0.43.0dev0 in /opt/conda/envs/notebook/lib/python3.11/site-packages (from numba->ssqueezepy) (0.43.0)
-    Downloading ssqueezepy-0.6.5-py3-none-any.whl (127 kB)
-    Installing collected packages: ssqueezepy
-    Successfully installed ssqueezepy-0.6.5
-    Note: you may need to restart the kernel to use updated packages.
-
-
 
 ```python
 import ssqueezepy as sqpy
@@ -356,21 +249,6 @@ axs.set_title("Continuous Wavelet Transform (Scaleogram)")
 axs.invert_yaxis()
 fig.colorbar(pcm, ax=axs)
 ```
-
-
-
-
-    <matplotlib.colorbar.Colorbar at 0x7fceaca47750>
-
-
-
-
-    
-![png](wavelets_files/wavelets_14_1.png)
-    
-
-
-
 ```python
 widths = np.geomspace(2, 4096, num=100)
 time, period, power, phase = cwt(t, y, widths=widths)
@@ -386,22 +264,3 @@ axs.invert_yaxis()
 fig.colorbar(pcm, ax=axs)
 ```
 
-
-    ---------------------------------------------------------------------------
-
-    NameError                                 Traceback (most recent call last)
-
-    Cell In[21], line 2
-          1 widths = np.geomspace(2, 4096, num=100)
-    ----> 2 time, period, power, phase = cwt(t, y, widths=widths)
-          4 plt.close("all")
-          5 fig, axs = plt.subplots()
-
-
-    NameError: name 'cwt' is not defined
-
-
-
-```python
-
-```
