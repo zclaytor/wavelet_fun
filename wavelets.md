@@ -1,3 +1,16 @@
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.16.7
+kernelspec:
+  display_name: notebook
+  language: python
+  name: python3
+---
+
 # Exploring Wavelet Analysis Tools in Python
 
 This is brought about by the deprecation of `scipy.signal.cwt` in `scipy` v1.12 and its removal in v1.15. The `scipy` team recommends the use of `pywavelets`, so can we reproduce `scipy` wavelet analysis with `pywavelets` and other tools?
@@ -5,6 +18,8 @@ This is brought about by the deprecation of `scipy.signal.cwt` in `scipy` v1.12 
 See:
 - [`scipy.signal.cwt` documentation](https://docs.scipy.org/doc/scipy-1.12.0/reference/generated/scipy.signal.cwt.html)
 - [`pywavelets` documentation](https://pywavelets.readthedocs.io/en/latest/)
+
++++
 
 ## Imports
 
@@ -14,12 +29,11 @@ We will need
 - `scipy.signal`<1.15 for the scipy implementation
 - `pywt` for the pywavelets implementation
 
-
-```python
+```{code-cell} ipython3
 %pip install -r requirements.txt
 ```
 
-```python
+```{code-cell} ipython3
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
@@ -32,8 +46,7 @@ Let's look at two different kinds of signals:
 1. a "chirp" signal, where the frequency changes with time
 2. a multimodal sinusoid, where each sine component has equal amplitude
 
-
-```python
+```{code-cell} ipython3
 def gaussian(x, x0, sigma):
     return np.exp(-((x - x0)/sigma)**2 / 2)
 
@@ -89,12 +102,12 @@ axs[1].set_ylabel("Frequency (Hz)")
 plt.suptitle("Sine signal")
 plt.show()
 ```
+
 ## Perform a Continuous Wavelet Transform on the Signals
 
 Using two implementations on two signals will give us four CWTs total.
 
-
-```python
+```{code-cell} ipython3
 def cwt_pywt(time, y_signal, widths, wavelet="cmor1.5-1.0"):
     sampling_period = np.diff(time).mean()
     cwtmatr, freqs = pywt.cwt(y_signal, widths, wavelet, sampling_period=sampling_period)
@@ -171,10 +184,11 @@ fig.tight_layout()
 
 I don't understand why the chirp power spectra are offset from where the dominant frequencies should be. If it's offset for those, why is it not also offset for the sinusoid power spectra? The peaks in the sinusoidal power spectra are very slightly offset from the defined frequencies, but this is probably wavelet resolution effects or something.
 
++++
+
 ## Everything below here is just playing around
 
-
-```python
+```{code-cell} ipython3
 import matplotlib.pyplot as plt
 import pywt
 import numpy as np
@@ -187,14 +201,16 @@ ax.set_title(wavelet)
 ax.set_xlim([-5, 5])
 ax.set_ylim([-0.8, 1])
 ```
-```python
+
+```{code-cell} ipython3
 periods = 2, 8, 32, 128, 512
 t0, tf = 0, 13*365.25
 t = np.arange(t0, tf, 0.1)
 y = np.sum([np.sin(2*np.pi*t/p) for p in periods], axis=0)
 plt.plot(t, y);
 ```
-```python
+
+```{code-cell} ipython3
 # perform CWT
 wavelet = "cmor1.5-1.0"
 #wavelet = "cmor1.8-1.0"
@@ -231,11 +247,11 @@ axs.invert_yaxis()
 fig.colorbar(pcm, ax=axs)
 ```
 
-```python
+```{code-cell} ipython3
 %pip install ssqueezepy
 ```
 
-```python
+```{code-cell} ipython3
 import ssqueezepy as sqpy
 wx, scale = sqpy.cwt(y, wavelet="morlet", t=t)
 p = 1/sqpy.experimental.scale_to_freq(scale, wavelet="morlet", N=len(t))
@@ -249,7 +265,8 @@ axs.set_title("Continuous Wavelet Transform (Scaleogram)")
 axs.invert_yaxis()
 fig.colorbar(pcm, ax=axs)
 ```
-```python
+
+```{code-cell} ipython3
 widths = np.geomspace(2, 4096, num=100)
 time, period, power, phase = cwt(t, y, widths=widths)
 
@@ -264,3 +281,6 @@ axs.invert_yaxis()
 fig.colorbar(pcm, ax=axs)
 ```
 
+```{code-cell} ipython3
+
+```
